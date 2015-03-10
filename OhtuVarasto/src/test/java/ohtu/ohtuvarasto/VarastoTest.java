@@ -1,14 +1,8 @@
 package ohtu.ohtuvarasto;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
-import org.junit.After;
-import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class VarastoTest {
 
@@ -28,6 +22,20 @@ public class VarastoTest {
     @Test
     public void uudellaVarastollaOikeaTilavuus() {
         assertEquals(10, varasto.getTilavuus(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void negatiivinenMaaraEiKasvata() {
+        varasto.lisaaVarastoon(8);
+        
+        varasto.lisaaVarastoon(-3);
+        assertEquals(8, varasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void eiLisataLiikaa() {
+        varasto.lisaaVarastoon(varasto.paljonkoMahtuu() + 1);
+        assertEquals(varasto.getTilavuus(), varasto.getSaldo(), 0);
     }
 
     @Test
@@ -63,6 +71,20 @@ public class VarastoTest {
 
         // varastossa pitäisi olla tilaa 10 - 8 + 2 eli 4
         assertEquals(4, varasto.paljonkoMahtuu(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void eiOtetaNegatiivista() {
+        varasto.lisaaVarastoon(3);
+        varasto.otaVarastosta(-1);
+        assertEquals(3, varasto.getSaldo(), 0);
+    }
+    
+    @Test
+    public void eiOtetaLiikaa() {
+        varasto.lisaaVarastoon(3);
+        varasto.otaVarastosta(varasto.getSaldo()+1);
+        assertEquals(0, varasto.getSaldo(), 0);
     }
 
     @Test
